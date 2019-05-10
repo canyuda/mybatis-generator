@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <properties resource="pi_mysql.properties"/>
+    <context id="mySQLTables" targetRuntime="MyBatis3Simple">
+
+        <!-- 生成的pojo，将implements Serializable-->
+        <!-- 还有很多类似的插件可以使用 -->
+        <!--<plugin type="org.mybatis.generator.plugins.SerializablePlugin">-->
+        <!--</plugin>-->
+
+        <commentGenerator>
+            <!--编码-->
+            <property name="javaFileEncoding" value="UTF-8"/>
+            <!-- optional，旨在创建class时，对注释进行控制 -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <jdbcConnection driverClass="${yuda.mysql.driverClass}"
+                        connectionURL="${yuda.mysql.url}"
+                        userId="${yuda.mysql.username}"
+                        password="${yuda.mysql.password}">
+        </jdbcConnection>
+
+        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+            NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- targetProject:生成PO类的位置 -->
+        <javaModelGenerator targetPackage="${yuda.domain.package}"
+                            targetProject=".\src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+
+        <!-- targetProject:mapper映射文件生成的位置 -->
+        <sqlMapGenerator targetPackage="${yuda.mapper.interface.package}"
+                         targetProject=".\src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 TODO-->
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+
+        <!-- targetPackage：mapper接口生成的位置 -->
+        <!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
+        type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
+        type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
+        type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口  -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="${yuda.mapper.xml.package}"
+                             targetProject=".\src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <!-- 指定数据库表 -->
+        <table tableName="${yuda.table.name}"
+               domainObjectName="${yuda.table.domain.name}"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByExample="false"
+               enableUpdateByPrimaryKey="false"
+               enableSelectByExample="false">
+            <!--用实际的列名,domain对象中字段与数据库中一致-->
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
