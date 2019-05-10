@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingqing.live.mybatis.live.LiveOrderCourseSurveyMapper">
+  <resultMap id="BaseResultMap" type="com.qingqing.live.domain.live.LiveOrderCourseSurvey">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ref_id" jdbcType="BIGINT" property="refId" />
+    <result column="ref_type" jdbcType="TINYINT" property="refType" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_type" jdbcType="TINYINT" property="userType" />
+    <result column="survey_id" jdbcType="BIGINT" property="surveyId" />
+    <result column="survey_status" jdbcType="TINYINT" property="surveyStatus" />
+    <result column="survey_result_id" jdbcType="BIGINT" property="surveyResultId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.qingqing.live.domain.live.LiveOrderCourseSurvey">
+    insert into t_live_order_course_survey (id, ref_id, ref_type, 
+      user_id, user_type, survey_id, 
+      survey_status, survey_result_id, create_time, 
+      is_deleted, last_update_time)
+    values (#{id,jdbcType=BIGINT}, #{refId,jdbcType=BIGINT}, #{refType,jdbcType=TINYINT}, 
+      #{userId,jdbcType=BIGINT}, #{userType,jdbcType=TINYINT}, #{surveyId,jdbcType=BIGINT}, 
+      #{surveyStatus,jdbcType=TINYINT}, #{surveyResultId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=TINYINT}, #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, ref_id, ref_type, user_id, user_type, survey_id, survey_status, survey_result_id, 
+    create_time, is_deleted, last_update_time
+    from t_live_order_course_survey
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, ref_id, ref_type, user_id, user_type, survey_id, survey_status, survey_result_id, 
+    create_time, is_deleted, last_update_time
+    from t_live_order_course_survey
+  </select>
+</mapper>
