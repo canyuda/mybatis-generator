@@ -3,15 +3,13 @@
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <!--引入配置-->
-    <properties resource="pi_mysql.properties"/>
+    <properties resource="mybatis-generator/mysql.properties"/>
     <!-- 指定数据连接驱动jar地址 -->
     <!--<classPathEntry location="${classPath}" />-->
     <!-- classPathEntry元素用于将JDBC驱动程序添加到运行时类路径。根据需要重复此元素以将元素添加到类路径。
     <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />
      -->
-    <!--
-        context:生成一组对象的环境
+    <!--context:生成一组对象的环境
         id:必选，上下文id，用于在生成错误时提示
         defaultModelType:指定生成对象的样式
             1，conditional：类似hierarchical；
@@ -20,12 +18,10 @@
         targetRuntime:
             1，MyBatis3：默认的值，生成基于MyBatis3.x以上版本的内容，包括XXXBySample；
             2，MyBatis3Simple：类似MyBatis3，只是不生成XXXBySample；
-        introspectedColumnImpl：类全限定名，用于扩展MBG
-    -->
+        introspectedColumnImpl：类全限定名，用于扩展MBG -->
     <context id="mySQLTables" targetRuntime="MyBatis3Simple">
         <!-- 自动识别数据库关键字，默认false，如果设置为true，根据SqlReservedWords中定义的关键字列表；
-            一般保留默认值，遇到数据库关键字（Java关键字），使用columnOverride覆盖
-         -->
+            一般保留默认值，遇到数据库关键字（Java关键字），使用columnOverride覆盖-->
         <property name="autoDelimitKeywords" value="false"/>
         <!-- 生成的Java文件的编码 -->
         <property name="javaFileEncoding" value="UTF-8"/>
@@ -40,7 +36,7 @@
         <!-- 还有很多类似的插件可以使用 -->
         <!--<plugin type="org.mybatis.generator.plugins.SerializablePlugin">-->
         <!--</plugin>-->
-        <!--        注释-->
+        <!--注释-->
         <commentGenerator>
             <!--编码-->
             <property name="javaFileEncoding" value="UTF-8"/>
@@ -49,9 +45,7 @@
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
-        <!-- 必须要有的，使用这个配置链接数据库
-            @TODO:是否可以扩展
-         -->
+        <!-- 必须要有的，使用这个配置链接数据库@是否可以扩展-->
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection driverClass="${yuda.mysql.driverClass}"
                         connectionURL="${yuda.mysql.url}"
@@ -65,44 +59,39 @@
         -->
         <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
             <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true 时把JDBC DECIMAL 和NUMERIC 类型解析为java.math.BigDecimal -->
-            <!--
-                true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
+            <!--true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
                 false：默认,
                     scale>0;length>18：使用BigDecimal;
                     scale=0;length[10,18]：使用Long；
                     scale=0;length[5,9]：使用Integer；
-                    scale=0;length<5：使用Short；
-             -->
-            <property name="forceBigDecimals" value="false"/>
+                    scale=0;length<5：使用Short；-->
+            <property name="forceBigDecimals" value="true"/>
+            <property name="useJSR310Types" value="true"/>
         </javaTypeResolver>
         <!-- targetProject:生成PO类的位置 -->
         <javaModelGenerator targetPackage="${yuda.domain.package}"
-                            targetProject=".\src\main\java">
-            <!--  for MyBatis3/MyBatis3Simple
-               自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter；
-            -->
+                            targetProject="./src/main/java">
+            <!--for MyBatis3/MyBatis3Simple自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter；-->
             <property name="constructorBased" value="false"/>
-            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <!-- enableSubPackages :是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
             <!-- 从数据库返回的值被清理前后的空格 -->
             <property name="trimStrings" value="true"/>
-            <!-- for MyBatis3 / MyBatis3Simple
+            <!--for MyBatis3 / MyBatis3Simple
                 是否创建一个不可变的类，如果为true，
-                那么MBG会创建一个没有setter方法的类，取而代之的是类似constructorBased的类
-             -->
+                那么MBG会创建一个没有setter方法的类，取而代之的是类似constructorBased的类 -->
             <property name="immutable" value="false"/>
             <!-- 设置一个根对象，
                 如果设置了这个根对象，那么生成的keyClass或者recordClass会继承这个类；在Table的rootClass属性中可以覆盖该选项
                 注意：如果在key class或者record class中有root class相同的属性，MBG就不会重新生成这些属性了，包括：
                     1，属性名相同，类型相同，有相同的getter/setter方法；
-
             <property name="rootClass" value="com._520it.mybatis.domain.BaseDomain"/>
              -->
         </javaModelGenerator>
         <!-- targetProject:mapper映射文件生成的位置 -->
-        <sqlMapGenerator targetPackage="${yuda.mapper.interface.package}"
-                         targetProject=".\src\main\java">
-            <!-- enableSubPackages:是否让schema作为包的后缀 TODO-->
+        <sqlMapGenerator targetPackage="${yuda.mapper.xml.package}"
+                         targetProject="./src/main/resources">
+            <!-- enableSubPackages:是否让schema作为包的后缀-->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
         <!-- targetPackage：mapper接口生成的位置 -->
@@ -111,8 +100,8 @@
         type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
         type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口  -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="${yuda.mapper.xml.package}"
-                             targetProject=".\src\main\java">
+                             targetPackage="${yuda.mapper.interface.package}"
+                             targetProject="./src/main/java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
@@ -125,7 +114,6 @@
             4，包含BLOB的类；
             5，一个用户生成动态查询的条件类（selectByExample, deleteByExample），可选；
             6，Mapper接口（可选）
-
             tableName（必要）：要生成对象的表名；
             注意：大小写敏感问题。正常情况下，MBG会自动的去识别数据库标识符的大小写敏感度，在一般情况下，MBG会
                 根据设置的schema，catalog或tablename去查询数据表，按照下面的流程：
@@ -135,7 +123,6 @@
                 4，否则，使用指定的大小写格式查询；
             另外的，如果在创建表的时候，使用的""把数据库对象规定大小写，就算数据库标识符是使用的大写，在这种情况下也会使用给定的大小写来创建表名；
             这个时候，请设置delimitIdentifiers="true"即可保留大小写格式；
-
             可选：
             1，schema：数据库的schema；
             2，catalog：数据库的catalog；
@@ -152,11 +139,11 @@
             13，modelType：参考context元素的defaultModelType，相当于覆盖；
             14，delimitIdentifiers：参考tableName的解释，注意，默认的delimitIdentifiers是双引号，如果类似MYSQL这样的数据库，使用的是`（反引号，那么还需要设置context的beginningDelimiter和endingDelimiter属性）
             15，delimitAllColumns：设置是否所有生成的SQL中的列名都使用标识符引起来。默认为false，delimitIdentifiers参考context的属性
-
             注意，table里面很多参数都是对javaModelGenerator，context等元素的默认属性的一个复写；
          -->
         <table tableName="${yuda.table.name}"
-               domainObjectName="${yuda.table.domain.name}" delimitAllColumns="false">
+               domainObjectName="${yuda.table.domain.name}"
+               delimitAllColumns="true">
             <!-- 参考 javaModelGenerator 的 constructorBased属性-->
             <property name="constructorBased" value="false"/>
             <!-- 默认为false，如果设置为true，在生成的SQL中，table名字不会加上catalog或schema； -->
@@ -181,9 +168,9 @@
             <property name="runtimeTableName" value=""/>
             -->
             <!-- 注意，该属性只针对MyBatis3Simple有用；
-                如果选择的runtime是MyBatis3Simple，那么会生成一个SelectAll方法，如果指定了selectAllOrderByClause，那么会在该SQL中添加指定的这个order条件；
+                如果选择的runtime是MyBatis3Simple，那么会生成一个SelectAll方法，如果指定了 selectAllOrderByClause，那么会在该SQL中添加指定的这个order条件；
              -->
-            <property name="selectAllOrderByClause" value="age desc,username asc"/>
+            <!--<property name="selectAllOrderByClause" value="age desc,username asc"/>-->
             <!-- 如果设置为true，生成的model类会直接使用column本身的名字，而不会再使用驼峰命名方法，比如BORN_DATE，生成的属性名字就是BORN_DATE,而不会是bornDate -->
             <property name="useActualColumnNames" value="false"/>
             <!-- generatedKey用于生成生成主键的方法，
@@ -200,50 +187,45 @@
                     SqlServer :相当于selectKey的SQL为：SELECT SCOPE_IDENTITY()
                     SYBASE    :相当于selectKey的SQL为：SELECT @@IDENTITY
                     JDBC      :相当于在生成的insert元素上添加useGeneratedKeys="true"和keyProperty属性
-            <generatedKey column="" sqlStatement=""/>
              -->
             <!--
                 该元素会在根据表中列名计算对象属性名之前先重命名列名，非常适合用于表中的列都有公用的前缀字符串的时候，
                 比如列名为：CUST_ID,CUST_NAME,CUST_EMAIL,CUST_ADDRESS等；
                 那么就可以设置searchString为"^CUST_"，并使用空白替换，那么生成的Customer对象中的属性名称就不是
                 custId,custName等，而是先被替换为ID,NAME,EMAIL,然后变成属性：id，name，email；
-
                 注意，MBG是使用java.util.regex.Matcher.replaceAll来替换searchString和replaceString的，
                 如果使用了columnOverride元素，该属性无效；
-
             <columnRenamingRule searchString="" replaceString=""/>
              -->
             <!-- 用来修改表中某个列的属性，MBG会使用修改后的列来生成domain的属性；
                column:要重新设置的列名；
                注意，一个table元素中可以有多个columnOverride元素哈~
              -->
-            <columnOverride column="status" javaType="com.test.domain.enums.HandoutsStatus"
-                            property="status"
-                            isGeneratedAlways="true">
-                <!-- 使用property属性来指定列要生成的属性名称 -->
-                <property name="property" value="status"/>
-                <!-- javaType用于指定生成的domain的属性类型，使用类型的全限定名
-                <property name="javaType" value=""/>
-                 -->
-                <!-- jdbcType用于指定该列的JDBC类型
-                <property name="jdbcType" value=""/>
-                 -->
-                <!-- typeHandler 用于指定该列使用到的TypeHandler，如果要指定，配置类型处理器的全限定名
-                    注意，mybatis中，不会生成到mybatis-config.xml中的typeHandler
-                    只会生成类似：where id = #{id,jdbcType=BIGINT,typeHandler=com._520it.mybatis.MyTypeHandler}的参数描述
-                <property name="typeHandler" value=""/>
-                -->
-                <!-- 参考table元素的delimitAllColumns配置，默认为false
-                <property name="delimitedColumnName" value=""/>
-                 -->
-            </columnOverride>
+            <!--            <columnOverride column="status" javaType="com.test.domain.enums.HandoutsStatus"-->
+            <!--                            property="status"-->
+            <!--                            isGeneratedAlways="true">-->
+            <!--                &lt;!&ndash; 使用property属性来指定列要生成的属性名称 &ndash;&gt;-->
+            <!--                <property name="property" value="status"/>-->
+            <!--                &lt;!&ndash; javaType用于指定生成的domain的属性类型，使用类型的全限定名-->
+            <!--                <property name="javaType" value=""/>-->
+            <!--                 &ndash;&gt;-->
+            <!--                &lt;!&ndash; jdbcType用于指定该列的JDBC类型-->
+            <!--                <property name="jdbcType" value=""/>-->
+            <!--                 &ndash;&gt;-->
+            <!--                &lt;!&ndash; typeHandler 用于指定该列使用到的TypeHandler，如果要指定，配置类型处理器的全限定名-->
+            <!--                    注意，mybatis中，不会生成到mybatis-config.xml中的typeHandler-->
+            <!--                    只会生成类似：where id = #{id,jdbcType=BIGINT,typeHandler=com._520it.mybatis.MyTypeHandler}的参数描述-->
+            <!--                <property name="typeHandler" value=""/>-->
+            <!--                &ndash;&gt;-->
+            <!--                &lt;!&ndash; 参考table元素的 delimitAllColumns 配置，默认为false-->
+            <!--                <property name="delimitedColumnName" value=""/>-->
+            <!--                 &ndash;&gt;-->
+            <!--            </columnOverride>-->
             <!-- ignoreColumn设置一个MGB忽略的列，如果设置了改列，那么在生成的domain中，生成的SQL中，都不会有该列出现
                column:指定要忽略的列的名字；
                delimitedColumnName：参考table元素的delimitAllColumns配置，默认为false
-
                注意，一个table元素中可以有多个ignoreColumn元素
-            <ignoreColumn column="deptId" delimitedColumnName=""/>
-            -->
+            <ignoreColumn column="deptId" delimitedColumnName=""/> -->
         </table>
     </context>
 </generatorConfiguration>
